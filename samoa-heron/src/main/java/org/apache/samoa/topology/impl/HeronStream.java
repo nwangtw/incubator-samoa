@@ -26,12 +26,12 @@ import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.topology.Stream;
 
 /**
- * Abstract class to implement Storm Stream
+ * Abstract class to implement Heron Stream
  * 
  * @author Arinto Murdopo
  * 
  */
-abstract class StormStream implements Stream, java.io.Serializable {
+abstract class HeronStream implements Stream, java.io.Serializable {
 
   /**
 	 * 
@@ -40,9 +40,9 @@ abstract class StormStream implements Stream, java.io.Serializable {
   protected final String outputStreamId;
   protected final InputStreamId inputStreamId;
 
-  public StormStream(String stormComponentId) {
+  public HeronStream(String heronComponentId) {
     this.outputStreamId = UUID.randomUUID().toString();
-    this.inputStreamId = new InputStreamId(stormComponentId, this.outputStreamId);
+    this.inputStreamId = new InputStreamId(heronComponentId, this.outputStreamId);
   }
 
   @Override

@@ -21,16 +21,16 @@ package org.apache.samoa.topology.impl;
  */
 
 /**
- * Interface to represent a node in samoa-storm topology.
+ * Interface to represent a node in samoa-heron topology.
  * 
  * @author Arinto Murdopo
  * 
  */
-interface StormTopologyNode {
+interface HeronTopologyNode {
 
-  void addToTopology(StormTopology topology, int parallelismHint);
+  void addToTopology(HeronTopology topology, int parallelismHint);
 
-  StormStream createStream();
+  HeronStream createStream();
 
   String getId();
 

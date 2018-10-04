@@ -29,45 +29,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.thrift7.TException;
-import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import backtype.storm.Config;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
-import backtype.storm.utils.NimbusClient;
-import backtype.storm.utils.Utils;
+//import backtype.storm.utils.Utils;
 
 /**
- * Helper class to submit SAMOA task into Storm without the need of submitting the jar file. The jar file must be
- * submitted first using StormJarSubmitter class.
+ * Helper class to submit SAMOA task into Heron without the need of submitting the jar file. The jar file must be
+ * submitted first using HeronJarSubmitter class.
  * 
  * @author Arinto Murdopo
  * 
  */
-public class StormTopologySubmitter {
+public class HeronTopologySubmitter {
 
   public static String YJP_OPTIONS_KEY = "YjpOptions";
 
-  private static Logger logger = LoggerFactory.getLogger(StormTopologySubmitter.class);
+  private static Logger logger = LoggerFactory.getLogger(HeronTopologySubmitter.class);
 
   public static void main(String[] args) throws IOException {
-    Properties props = StormSamoaUtils.getProperties();
+    /*
+    Properties props = HeronSamoaUtils.getProperties();
 
-    String uploadedJarLocation = props.getProperty(StormJarSubmitter.UPLOADED_JAR_LOCATION_KEY);
+    String uploadedJarLocation = props.getProperty(HeronJarSubmitter.UPLOADED_JAR_LOCATION_KEY);
     if (uploadedJarLocation == null) {
       logger.error("Invalid properties file. It must have key {}",
-          StormJarSubmitter.UPLOADED_JAR_LOCATION_KEY);
+          HeronJarSubmitter.UPLOADED_JAR_LOCATION_KEY);
       return;
     }
 
     List<String> tmpArgs = new ArrayList<String>(Arrays.asList(args));
-    int numWorkers = StormSamoaUtils.numWorkers(tmpArgs);
+    int numWorkers = HeronSamoaUtils.numWorkers(tmpArgs);
 
     args = tmpArgs.toArray(new String[0]);
-    StormTopology stormTopo = StormSamoaUtils.argsToTopology(args);
+    HeronTopology heronTopo = HeronSamoaUtils.argsToTopology(args);
 
     Config conf = new Config();
     conf.putAll(Utils.readStormConfig());
@@ -76,7 +74,7 @@ public class StormTopologySubmitter {
     conf.setNumWorkers(numWorkers);
 
     String profilerOption =
-        props.getProperty(StormTopologySubmitter.YJP_OPTIONS_KEY);
+        props.getProperty(HeronTopologySubmitter.YJP_OPTIONS_KEY);
     if (profilerOption != null) {
       String topoWorkerChildOpts = (String) conf.get(Config.TOPOLOGY_WORKER_CHILDOPTS);
       StringBuilder optionBuilder = new StringBuilder();
@@ -103,12 +101,12 @@ public class StormTopologySubmitter {
     config.putAll(Utils.readStormConfig());
 
     NimbusClient nc = NimbusClient.getConfiguredClient(config);
-    String topologyName = stormTopo.getTopologyName();
+    String topologyName = heronTopo.getTopologyName();
     try {
       System.out.println("Submitting topology with name: "
           + topologyName);
       nc.getClient().submitTopology(topologyName, uploadedJarLocation,
-          out.toString(), stormTopo.getStormBuilder().createTopology());
+          out.toString(), heronTopo.getStormBuilder().createTopology());
       System.out.println(topologyName + " is successfully submitted");
 
     } catch (AlreadyAliveException aae) {
@@ -121,6 +119,7 @@ public class StormTopologySubmitter {
       System.out.println("Texception for " + topologyName);
       te.printStackTrace();
     }
+    */
   }
 
   private static String uploadedJarLocation(List<String> tmpArgs) {

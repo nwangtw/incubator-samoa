@@ -22,24 +22,24 @@ package org.apache.samoa.topology.impl;
  */
 //
 //import org.apache.samoa.core.ContentEvent;
-//import org.apache.samoa.topology.impl.StormEntranceProcessingItem.StormEntranceSpout;
+//import org.apache.samoa.topology.impl.HeronEntranceProcessingItem.HeronEntranceSpout;
 //
 ///**
-// * Storm Stream that connects into Spout. It wraps the spout itself
+// * Heron Stream that connects into Spout. It wraps the spout itself
 // * @author Arinto Murdopo
 // *
 // */
-//final class StormSpoutStream extends StormStream{
+//final class HeronSpoutStream extends HeronStream{
 //
 //	/**
 //	 * 
 //	 */
 //	private static final long serialVersionUID = -7444653177614988650L;
 //	
-//	private StormEntranceSpout spout;
+//	private HeronEntranceSpout spout;
 //	
-//	StormSpoutStream(String stormComponentId) {
-//		super(stormComponentId);
+//	HeronSpoutStream(String HeronComponentId) {
+//		super(HeronComponentId);
 //	}
 //
 //	@Override
@@ -47,7 +47,7 @@ package org.apache.samoa.topology.impl;
 //		spout.put(this, contentEvent);
 //	}
 //	
-//    void setSpout(StormEntranceSpout spout){
+//    void setSpout(HeronEntranceSpout spout){
 //		this.spout = spout;
 //	}
 //

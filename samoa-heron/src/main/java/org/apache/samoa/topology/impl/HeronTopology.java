@@ -26,24 +26,24 @@ import org.apache.samoa.topology.IProcessingItem;
 import backtype.storm.topology.TopologyBuilder;
 
 /**
- * Adaptation of SAMOA topology in samoa-storm
+ * Adaptation of SAMOA topology in samoa-heron
  * 
  * @author Arinto Murdopo
  * 
  */
-public class StormTopology extends AbstractTopology {
+public class HeronTopology extends AbstractTopology {
 
   private TopologyBuilder builder;
 
-  public StormTopology(String topologyName) {
+  public HeronTopology(String topologyName) {
     super(topologyName);
     this.builder = new TopologyBuilder();
   }
 
   @Override
   public void addProcessingItem(IProcessingItem procItem, int parallelismHint) {
-    StormTopologyNode stormNode = (StormTopologyNode) procItem;
-    stormNode.addToTopology(this, parallelismHint);
+    HeronTopologyNode heronNode = (HeronTopologyNode) procItem;
+    heronNode.addToTopology(this, parallelismHint);
     super.addProcessingItem(procItem, parallelismHint);
   }
 

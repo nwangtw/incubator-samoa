@@ -26,12 +26,12 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.tuple.Values;
 
 /**
- * Storm Stream that connects into Bolt. It wraps Storm's outputCollector class
+ * Heron Stream that connects into Bolt. It wraps Heron's outputCollector class
  * 
  * @author Arinto Murdopo
  * 
  */
-class StormBoltStream extends StormStream {
+class HeronBoltStream extends HeronStream {
 
   /**
 	 * 
@@ -40,8 +40,8 @@ class StormBoltStream extends StormStream {
 
   private OutputCollector outputCollector;
 
-  StormBoltStream(String stormComponentId) {
-    super(stormComponentId);
+  HeronBoltStream(String heronComponentId) {
+    super(heronComponentId);
   }
 
   @Override

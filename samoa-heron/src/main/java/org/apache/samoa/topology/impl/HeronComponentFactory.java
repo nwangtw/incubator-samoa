@@ -33,35 +33,35 @@ import org.apache.samoa.topology.Stream;
 import org.apache.samoa.topology.Topology;
 
 /**
- * Component factory implementation for samoa-storm
+ * Component factory implementation for samoa-heron
  */
-public final class StormComponentFactory implements ComponentFactory {
+public final class HeronComponentFactory implements ComponentFactory {
 
   private final Map<String, Integer> processorList;
 
-  public StormComponentFactory() {
+  public HeronComponentFactory() {
     processorList = new HashMap<>();
   }
 
   @Override
   public ProcessingItem createPi(Processor processor) {
-    return new StormProcessingItem(processor, this.getComponentName(processor.getClass()), 1);
+    return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), 1);
   }
 
   @Override
   public EntranceProcessingItem createEntrancePi(EntranceProcessor processor) {
-    return new StormEntranceProcessingItem(processor, this.getComponentName(processor.getClass()));
+    return new HeronEntranceProcessingItem(processor, this.getComponentName(processor.getClass()));
   }
 
   @Override
   public Stream createStream(IProcessingItem sourcePi) {
-    StormTopologyNode stormCompatiblePi = (StormTopologyNode) sourcePi;
-    return stormCompatiblePi.createStream();
+    HeronTopologyNode heronCompatiblePi = (HeronTopologyNode) sourcePi;
+    return heronCompatiblePi.createStream();
   }
 
   @Override
   public Topology createTopology(String topoName) {
-    return new StormTopology(topoName);
+    return new HeronTopology(topoName);
   }
 
   private String getComponentName(Class<? extends Processor> clazz) {
@@ -85,6 +85,6 @@ public final class StormComponentFactory implements ComponentFactory {
 
   @Override
   public ProcessingItem createPi(Processor processor, int parallelism) {
-    return new StormProcessingItem(processor, this.getComponentName(processor.getClass()), parallelism);
+    return new HeronProcessingItem(processor, this.getComponentName(processor.getClass()), parallelism);
   }
 }

@@ -31,12 +31,12 @@ import backtype.storm.StormSubmitter;
 import backtype.storm.utils.Utils;
 
 /**
- * Utility class to submit samoa-storm jar to a Storm cluster.
+ * Utility class to submit samoa-heron jar to a Heron cluster.
  * 
  * @author Arinto Murdopo
  * 
  */
-public class StormJarSubmitter {
+public class HeronJarSubmitter {
 
   public final static String UPLOADED_JAR_LOCATION_KEY = "UploadedJarLocation";
 
@@ -63,13 +63,13 @@ public class StormJarSubmitter {
     System.out.println("Uploaded jar file location: ");
     System.out.println(uploadedJarLocation);
 
-    Properties props = StormSamoaUtils.getProperties();
-    props.setProperty(StormJarSubmitter.UPLOADED_JAR_LOCATION_KEY, uploadedJarLocation);
+    Properties props = HeronSamoaUtils.getProperties();
+    props.setProperty(HeronJarSubmitter.UPLOADED_JAR_LOCATION_KEY, uploadedJarLocation);
 
-    File f = new File("src/main/resources/samoa-storm-cluster.properties");
+    File f = new File("src/main/resources/samoa-heron-cluster.properties");
     f.createNewFile();
 
     OutputStream out = new FileOutputStream(f);
-    props.store(out, "properties file to store uploaded jar location from StormJarSubmitter");
+    props.store(out, "properties file to store uploaded jar location from HeronJarSubmitter");
   }
 }

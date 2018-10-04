@@ -38,25 +38,25 @@ import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 
 /**
- * EntranceProcessingItem implementation for Storm.
+ * EntranceProcessingItem implementation for Heron.
  */
-class StormEntranceProcessingItem extends AbstractEntranceProcessingItem implements StormTopologyNode {
-  private final StormEntranceSpout piSpout;
+class HeronEntranceProcessingItem extends AbstractEntranceProcessingItem implements HeronTopologyNode {
+  private final HeronEntranceSpout piSpout;
 
-  StormEntranceProcessingItem(EntranceProcessor processor) {
+  HeronEntranceProcessingItem(EntranceProcessor processor) {
     this(processor, UUID.randomUUID().toString());
   }
 
-  StormEntranceProcessingItem(EntranceProcessor processor, String friendlyId) {
+  HeronEntranceProcessingItem(EntranceProcessor processor, String friendlyId) {
     super(processor);
     this.setName(friendlyId);
-    this.piSpout = new StormEntranceSpout(processor);
+    this.piSpout = new HeronEntranceSpout(processor);
   }
 
   @Override
   public EntranceProcessingItem setOutputStream(Stream stream) {
     // piSpout.streams.add(stream);
-    piSpout.setOutputStream((StormStream) stream);
+    piSpout.setOutputStream((HeronStream) stream);
     return this;
   }
 
@@ -66,12 +66,12 @@ class StormEntranceProcessingItem extends AbstractEntranceProcessingItem impleme
   }
 
   @Override
-  public void addToTopology(StormTopology topology, int parallelismHint) {
+  public void addToTopology(HeronTopology topology, int parallelismHint) {
     topology.getStormBuilder().setSpout(this.getName(), piSpout, parallelismHint);
   }
 
   @Override
-  public StormStream createStream() {
+  public HeronStream createStream() {
     return piSpout.createStream(this.getName());
   }
 
@@ -88,42 +88,42 @@ class StormEntranceProcessingItem extends AbstractEntranceProcessingItem impleme
   }
 
   /**
-   * Resulting Spout of StormEntranceProcessingItem
+   * Resulting Spout of HeronEntranceProcessingItem
    */
-  final static class StormEntranceSpout extends BaseRichSpout {
+  final static class HeronEntranceSpout extends BaseRichSpout {
 
     private static final long serialVersionUID = -9066409791668954099L;
 
-    // private final Set<StormSpoutStream> streams;
+    // private final Set<HeronSpoutStream> streams;
     private final EntranceProcessor entranceProcessor;
-    private StormStream outputStream;
+    private HeronStream outputStream;
 
     // private transient SpoutStarter spoutStarter;
     // private transient Executor spoutExecutors;
-    // private transient LinkedBlockingQueue<StormTupleInfo> tupleInfoQueue;
+    // private transient LinkedBlockingQueue<HeronTupleInfo> tupleInfoQueue;
 
     private SpoutOutputCollector collector;
 
-    StormEntranceSpout(EntranceProcessor processor) {
-      // this.streams = new HashSet<StormSpoutStream>();
+    HeronEntranceSpout(EntranceProcessor processor) {
+      // this.streams = new HashSet<HeronSpoutStream>();
       this.entranceProcessor = processor;
     }
 
-    public StormStream getOutputStream() {
+    public HeronStream getOutputStream() {
       return outputStream;
     }
 
-    public void setOutputStream(StormStream stream) {
+    public void setOutputStream(HeronStream stream) {
       this.outputStream = stream;
     }
 
     @Override
     public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
       this.collector = collector;
-      // this.tupleInfoQueue = new LinkedBlockingQueue<StormTupleInfo>();
+      // this.tupleInfoQueue = new LinkedBlockingQueue<HeronTupleInfo>();
 
       // Processor and this class share the same instance of stream
-      // for (StormSpoutStream stream : streams) {
+      // for (HeronSpoutStream stream : streams) {
       // stream.setSpout(this);
       // }
       // outputStream.setSpout(this);
@@ -142,51 +142,51 @@ class StormEntranceProcessingItem extends AbstractEntranceProcessingItem impleme
         collector.emit(outputStream.getOutputId(), value);
       } else
         Utils.sleep(1000);
-      // StormTupleInfo tupleInfo = tupleInfoQueue.poll(50,
+      // HeronTupleInfo tupleInfo = tupleInfoQueue.poll(50,
       // TimeUnit.MILLISECONDS);
       // if (tupleInfo != null) {
       // Values value = newValues(tupleInfo.getContentEvent());
-      // collector.emit(tupleInfo.getStormStream().getOutputId(), value);
+      // collector.emit(tupleInfo.getHeronStream().getOutputId(), value);
       // }
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      // for (StormStream stream : streams) {
+      // for (HeronStream stream : streams) {
       // declarer.declareStream(stream.getOutputId(), new
-      // Fields(StormSamoaUtils.CONTENT_EVENT_FIELD,
-      // StormSamoaUtils.KEY_FIELD));
+      // Fields(HeronSamoaUtils.CONTENT_EVENT_FIELD,
+      // HeronSamoaUtils.KEY_FIELD));
       // }
-      declarer.declareStream(outputStream.getOutputId(), new Fields(StormSamoaUtils.CONTENT_EVENT_FIELD,
-          StormSamoaUtils.KEY_FIELD));
+      declarer.declareStream(outputStream.getOutputId(), new Fields(HeronSamoaUtils.CONTENT_EVENT_FIELD,
+          HeronSamoaUtils.KEY_FIELD));
     }
 
-    StormStream createStream(String piId) {
-      // StormSpoutStream stream = new StormSpoutStream(piId);
-      StormStream stream = new StormBoltStream(piId);
+    HeronStream createStream(String piId) {
+      // HeronSpoutStream stream = new HeronSpoutStream(piId);
+      HeronStream stream = new HeronBoltStream(piId);
       // streams.add(stream);
       return stream;
     }
 
-    // void put(StormSpoutStream stream, ContentEvent contentEvent) {
-    // tupleInfoQueue.add(new StormTupleInfo(stream, contentEvent));
+    // void put(HeronSpoutStream stream, ContentEvent contentEvent) {
+    // tupleInfoQueue.add(new HeronTupleInfo(stream, contentEvent));
     // }
 
     private Values newValues(ContentEvent contentEvent) {
       return new Values(contentEvent, contentEvent.getKey());
     }
 
-    // private final static class StormTupleInfo {
+    // private final static class HeronTupleInfo {
     //
-    // private final StormStream stream;
+    // private final HeronStream stream;
     // private final ContentEvent event;
     //
-    // StormTupleInfo(StormStream stream, ContentEvent event) {
+    // HeronTupleInfo(HeronStream stream, ContentEvent event) {
     // this.stream = stream;
     // this.event = event;
     // }
     //
-    // public StormStream getStormStream() {
+    // public HeronStream getHeronStream() {
     // return this.stream;
     // }
     //
